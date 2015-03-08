@@ -5,14 +5,23 @@
     previousText: 'Previous Track',
 	playlistItems : null,
 	loopText : "Toggle Loop",
+	toggleTracklistText : "Toggle Track List",
+	noTracksText : "No tracks ",
+	tracklistPosition : "top"
   });
 
+   //player Parent Dom
+    var playerParentSelector = ".mejs-audio-player-parent";
+  
    //define the button classes 
    var forwardClass = "mejs-forward-button";
 		
    var backwardClass = "mejs-backward-button";
    
    playlistDataSelector = ".mejs-playlist-data";
+   
+   //track list domSelector 
+   var tracklistDomSelector = "mejs-track-list-panel";
    
    //show debug msg 
    function debugMsg(msg){
@@ -51,7 +60,7 @@
     //lets build forward button 
     buildforward : function(player, controls, layers, media) {
     
-	var forwardButton = $("<span class='mejs-button'><button title='"+mejs.MepDefaults.nextText+"' type='button' class='"+forwardClass+"'>"+mejs.MepDefaults.nextText+"</button></span>");
+	var forwardButton = $("<span class='mejs-button'><button title='"+this.options.nextText+"' type='button' class='"+forwardClass+"'>"+mejs.MepDefaults.nextText+"</button></span>");
      
 	 //append to control 
 	 forwardButton.appendTo(this.controls);
@@ -128,19 +137,132 @@
 	},//end build loop 
 	
 	
-	/*///////////////////Build TrackList /////////
-	buildtracklist : function(){
 	
-    //the dom 
-    var trackListDom = $("<div class='mejs-track-list'></div>");	
+    ////////////////BUILD TRACK LIST /////////
+	buildtracklist : function(layer, controls, layers, media){
+		
+	thisClass = this;
 	
-    },//end build Track List 	
-	*/
+	toggleTracklistText = this.options.toggleTracklistText;
+	
+    //toggleTracklist Button 
+	var toggleTracklistButton = "<span class='mejs-button'><button type='button' class='mejs-toggle-tracklist mejs-toggle-tracklist-off' title='"+toggleTracklistText+"'>"+toggleTracklistText+"</button></span>";
+	
+	//lets append to the controls 
+	$(toggleTracklistButton).appendTo(this.controls);
+	
+	//mejs-track-list-panel 
+	var tracklistPanelSelector = ".mejs-track-list-panel";
+	
+	//if clicked 
+	$(".mejs-toggle-tracklist").on("click",function(evt){
+		evt.preventDefault();
+
+		//lets toggle class 
+		//$(tracklistPanelSelector).toggleClass("mejs-track-list-panel-visible mejs-track-list-panel-hidden");
+		
+		//slideToggle ,Show or hide the track list 
+		$("."+tracklistDomSelector).slideToggle();
+		
+		//lets change the button 
+		$(this).toggleClass("mejs-toggle-tracklist-on","mejs-toggle-tracklist-off");
+	});
+	  
+	//the track list panel 
+	var trackListPanelDom = $("<div class='"+tracklistDomSelector+"'></div>");
+	
+     //get the track list 
+	var playlistItems = this.getPlaylistItemsData();
+	
+	//if no data or false 
+	if(playlistItems == false){
+		//show empty text 
+		trackListPanelDom.html(this.options.noTracksText);
+		
+		//show debug message 
+		debugMsg("The track list is empty");
+		
+		return false;
+	}//end if false 
+	
+	
+	//lets loop the data and add it to it 
+	playlistItemsLen = playlistItems.length;
+	
+	//lets loop the array and get the contents 
+	for(i =0; i < playlistItemsLen;i++){
+		
+		var itemObj = playlistItems[i];
+		
+		console.log(i);
+		
+		var itemUrl = itemObj.itemUrl;
+		
+		var itemName = itemObj.itemName;
+		
+		//if index exists, lets set t to the index , else lets give it indexing 
+		if(itemObj.itemIndex){
+			itemId = itemObj.itemIndex;
+		}else{
+		    itemId = i;
+		}
+		
+		//lets append it to the tracklist dom 
+		var trackItemDom = $("<a href='javascript:void();' class='mejs-track-item' id='"+itemId+"'>"+itemName+"</a>");
+		
+		//appendTo the panel dom 
+		trackItemDom.appendTo(trackListPanelDom);
+		
+    }//end foreach loop 
+	
+     
+	 //if the tracklist position is top 
+	 
+	if(this.options.tracklistPosition == "top"){
+	//lets now append the trackListPanelDom to the layers 
+	trackListPanelDom.prependTo($(playerParentSelector));
+	}else{
+	//if bottom then append 
+	trackListPanelDom.appendTo($(playerParentSelector));
+	}//end if the track list is to be shown at the bottom 
+	
+	//hide the panelDom 
+	trackListPanelDom.hide();
+	
+	
+	//if any of the track item is clicked 
+		$(document).on("click",".mejs-track-item",function(evt){
+			
+			evt.preventDefault();
+	
+			//the item id 
+			var itemIndex = $(this).attr("id");
+			
+			//play Item By Id 
+			thisClass.playItemByIndex(itemIndex);	
+		});
+		
+	},//end build track list 
+	
+	
+	
 ////////////////////////////BUILD PLAYLIST //////// 	 
 	 //build the playlist
 	 buildplaylist : function(layer, controls, layers, media){
 		
 		var thisClass = this;
+		
+		
+		//Call refreshPlaylistData(); and this.getPlaylistItemsData() b4 calling any other method 
+		
+		//call the refresh playlist Data to get all the playlist content into a global variable
+		this.refreshPlaylistData();
+		
+		//lets now set the playlist current item 
+		var playlistItems = this.getPlaylistItemsData();
+		
+		//call buildtracklist to show and hide tracklist 
+		this.buildtracklist();
 		
 		//add the backward 
 	    this.buildbackward();
@@ -150,16 +272,7 @@
 		
 		//lets build the loop
         this.buildloop();		
-		
-		//call the playlistItemsPanel for the 
-		//this.buildtracklist();
-		
-		//call the refresh playlist Data to get all the playlist content into a global variable
-		console.log(this.refreshPlaylistData());
-		
-		//lets now set the playlist current item 
-		var playlistItems = this.getPlaylistItemsData();
-		
+			
 		//lets get the first Index's data 
 		firstItemData = this.getItemByIndex(0);
 		
@@ -349,8 +462,16 @@
 	//lets set currentItemIndex to the current Index 
 	this.currentItemIndex = itemIndex;
 	
-	//lets check if its really playing and set the item list in the dom data as active 
+	//tracklistDomSelector
+	tracklistSelector = "."+tracklistDomSelector;
 	
+	//lets check if its really playing and set the item list in the dom data as active 
+	$(tracklistSelector).find("a").removeClass("mejs-current-item");
+	
+	//lets now add the current 
+	$(tracklistSelector).find("#"+itemIndex).addClass("mejs-current-item");
+	
+	tracklistSelector = null;
 	},//end play Item By Index 
 	
 	
@@ -367,9 +488,7 @@
 	
 	//next Item to play 
 	var nextItemIndex = this.currentItemIndex+1;
-	
-	console.log(getPlaylistItems.length+"-"+nextItemIndex);
-	
+
 	//lets get the current Item Index 
 	if(nextItemIndex > getPlaylistItems.length-1){//-1 since array starts from 0 thus our index starts from 0 
 	 

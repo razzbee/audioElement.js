@@ -1,17 +1,22 @@
+
+.mejs-audio-player-parent{
+background:transparent;
+}
+
 .mejs-offscreen{
 /* Accessibility: hide screen reader texts (and prefer "top" for RTL languages). */
 display:none;
 }
 
 /** audio player styles **/
-.audio-player, .audio-player div, .audio-player h2, .audio-player a, .audio-player span, .audio-player button {
+.mejs-audio-player, .mejs-audio-player div, .mejs-audio-player h2, .mejs-audio-player a, .mejs-audio-player span, .mejs-audio-player button {
   margin: 0;
   padding: 0;
   border: none;
   outline: none;
 }
 
-div.audio-player {
+div.mejs-audio-player {
   position: relative;
   width: 100%;
   height: 76px;
@@ -25,7 +30,7 @@ div.audio-player {
   overflow:hidden;
 }
 
-.audio-player h2 {
+.mejs-audio-player h2 {
   position:relative;top:10px;
   max-width:25%;
   display:block;
@@ -37,6 +42,70 @@ div.audio-player {
   color: #ececec;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
   overflow:hidden;
+}
+
+/***Toggle(Show/Hide ) Track List ***/
+.mejs-toggle-tracklist {
+position:absolute;
+top:28px;
+right : 196px;
+display: block;
+background:transparent;
+width: 26px;
+height: 26px;
+}
+
+.mejs-toggle-tracklist-off{
+background: url('toggleTrackListOff.png') no-repeat;
+}
+
+.mejs-toggle-tracklist-on{
+background: url('toggleTrackListOn.png') no-repeat;
+}
+
+
+/**The Track List Panel **/
+.mejs-track-list-panel{
+display:block;
+background : #4c4e5a;
+background: rgba(76,78,90,0.9);
+border : 1px solid #7B7D82;
+border-radius:4px 4px 0px 0px;
+}
+
+.mejs-track-list-panel a, .mejs-track-list-panel .mejs-track-item{
+font-size:16px !important;
+
+ color: #ececec;
+ padding:4px;
+ display:block;
+ text-decoration : none;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.mejs-track-list-panel .mejs-track-item:hover {
+color:#8BC967;
+}
+
+.mejs-current-item{
+font-weight:700 !important;
+color:#8BC967 !important;
+}
+
+.mejs-current-item:after{
+content: url('current.png');
+position:relative;
+top:4px;
+}
+
+/**Hidden .mejs-track-list-panel-hidden **/
+.mejs-track-list-panel-hidden{
+display:none;
+}
+
+/**Visible TrackList **/
+.mejs-track-list-panel-visible{ 
+display:block;
 }
 
 /*Duration and current Time
@@ -252,8 +321,8 @@ position: absolute;
 display: block;
 background:transparent;
 top:28px;
-right:145px;
-width: 44px;
+right:158px;
+width: 28px;
 height: 40px;
 }
 
@@ -275,6 +344,9 @@ background: url('mejs-loop-single.png') no-repeat;
 
 /***End Looop **/
 
+
+
+
 /**Media Queries to help smaller screen in the responsive world */
 /*Tablets **/
   
@@ -292,7 +364,12 @@ right : 73px;
 
 /*Loop Button */
 .mejs-loop-button{
-right : 82px;
+right : 96px;
+}
+
+/**Toggle TrackList **/
+.mejs-toggle-tracklist {
+right : 130px;
 }
 
 }/**End Tablets **/
@@ -313,20 +390,25 @@ right : 62px;
 
 /*Loop Button */
 .mejs-loop-button{
-right : 70px;
+right : 86px;
+}
+
+/**Toggle TrackList **/
+.mejs-toggle-tracklist {
+right : 120px;
 }
 
 /*Audio Title Text **/
-.audio-player h2 {
-font-weight : 500;
-padding-left:10px;font-size:14px;width:35%;
+.mejs-audio-player h2 {
+font-weight : 400;
+left:-12px !important;font-size:14px;width:30%;
 }
 
 }
 
 
 /**Smartphones and very small screen **/
-@media screen and (max-width: 320px) {
+@media screen and (max-width: 350px) {
 
 /*Volume Slider */
 .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total ,.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-handle,.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current{
@@ -340,13 +422,18 @@ right : 4px;
 
 /*Loop Button */
 .mejs-loop-button{
-right : 9px;
+right : 27px;
+}
+
+/**Toggle TrackList **/
+.mejs-toggle-tracklist {
+right : 60px;
 }
 
 /*Audio Title Text **/
-.audio-player h2 {
-font-weight : 400;
-padding-left:50px;font-size:12px;width:35%;
+.mejs-audio-player h2 {
+font-weight : 300;
+left:20px !important;font-size:12px;width:30%;
 }
 
                                          }

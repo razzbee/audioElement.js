@@ -21,16 +21,12 @@
 <script type="text/javascript">
 $(function(){
  audioPlayer = new audioElementPlayer("#audio-player",{
-    alwaysShowControls: true,
-    features: ['playpause','progress','volume','playlist','duration','current'],
     audioVolume: 'horizontal',
     audioWidth: '100%',
     audioHeight: 76,
 	debug : true,
 	playlistItems : [{itemName : "Bob Marley", itemUrl:"topRanking.mp3"}],
-    iPadUseNativeControls: true,
-    iPhoneUseNativeControls: true,
-    AndroidUseNativeControls: true
+    
   });
   
  /* .prependItem({

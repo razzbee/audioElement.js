@@ -7,9 +7,19 @@
 	loopText : "Toggle Loop",
 	toggleTracklistText : "Toggle Track List",
 	noTracksText : "No tracks ",
-	tracklistPosition : "top"
+	tracklistPosition : "top",
+	iPadUseNativeControls: true,
+    iPhoneUseNativeControls: true,
+    AndroidUseNativeControls: true,
+	alwaysShowControls: true
   });
 
+  //for the features lets force a custom feature 
+  mejs.MepDefaults.features = ['playpause','progress','volume','playlist','duration','current'];
+   
+   //we implemented our own loop,so lets disable mejs loop feature
+   mejs.MepDefaults.loop = false;
+  
    //player Parent Dom
     var playerParentSelector = ".mejs-audio-player-parent";
   

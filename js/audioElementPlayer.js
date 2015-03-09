@@ -233,7 +233,7 @@
 		
 		var itemObj = playlistItems[i];
 		
-		console.log(i);
+		//console.log(i);
 		
 		var itemUrl = itemObj.itemUrl;
 		
@@ -370,7 +370,7 @@
 	
 	//scan playList data 
 	var scanPlayListData = $(playlistDataSelector).find("li");
-			console.log(scanPlayListData);
+			//console.log(scanPlayListData);
 	//lets now insert the new playlist data into the array 
 	scanPlayListData.each(function(itemIndex){
 				
@@ -488,7 +488,7 @@
     playlistItems = this.getPlaylistItemsData();
 	
 		
-		console.log(this.playlistItemsData);
+		//console.log(this.playlistItemsData);
 		
 	//discontinue if false
 	if(playlistItems == false){
@@ -706,8 +706,6 @@
 ///////////Audio Elemeent Js 
 function audioElementPlayer(selector,paramObj){
 
-return $(selector).each(function(){
-
 //lets modify user dom 
 var audioJsDom = "<div class='mejs-audio-player-parent'><div class='mejs-audio-player'></div></div>";
 
@@ -715,13 +713,12 @@ var audioJsDom = "<div class='mejs-audio-player-parent'><div class='mejs-audio-p
 $(selector).wrap(audioJsDom);
 
 //lets add the title 
-$("<h2 class='mejs-item-title'>Title Here</h2>").prependTo(".mejs-audio-player");
+$("<h2 class='mejs-item-title'></h2>").prependTo(".mejs-audio-player");
 
 //lets call mediaElementJs 
 var mediaElement = new MediaElementPlayer(selector,paramObj);
 
 return mediaElement;
-});
 
 }//end function 
 

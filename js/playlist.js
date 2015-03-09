@@ -3,7 +3,7 @@
 	$.extend(mejs.MepDefaults, {
     nextText: 'Next Track',
     previousText: 'Previous Track',
-	playlistItems : null,
+	playlistItems : [],
 	loopText : "Toggle Loop",
 	toggleTracklistText : "Toggle Track List",
 	noTracksText : "No tracks ",
@@ -33,7 +33,7 @@
     $.extend(MediaElementPlayer.prototype, {
 	
 	//set the playlist Items url 
-    playlistItemsData : null,
+    playlistItemsData : new Array(),
 	
 	//currentItemIndex 
 	currentItemIndex : 0,
@@ -167,8 +167,37 @@
 		//lets change the button 
 		$(this).toggleClass("mejs-toggle-tracklist-on","mejs-toggle-tracklist-off");
 	});
+	
+	
+	   //lets create the tracklist panel 
+		this.createTrackListPanel();
+		
+		//if any of the track item is clicked 
+		$(document).on("click",".mejs-track-item",function(evt){
+			
+			evt.preventDefault();
+	
+			//the item id 
+			var itemIndex = $(this).attr("id");
+			
+			//play Item By Id 
+			thisClass.playItemByIndex(itemIndex);	
+		});
 	  
-	//the track list panel 
+	},//end build track list 
+	
+	
+	
+	////////////////////////////////CREATE TRACK LIST PANEL /////
+	createTrackListPanel : function(){
+	
+	//player Parent Dom 
+	var playerParent = this.layers.parents(playerParentSelector);
+	
+	//if there is an existing tracklist dom ,lets remove it 
+	playerParent.find("."+tracklistDomSelector).remove();
+	
+    //the track list panel 
 	var trackListPanelDom = $("<div class='"+tracklistDomSelector+"'></div>");
 	
      //get the track list 
@@ -212,7 +241,7 @@
 		
 		//appendTo the panel dom 
 		trackItemDom.appendTo(trackListPanelDom);
-		
+
     }//end foreach loop 
 	
      
@@ -220,29 +249,16 @@
 	 
 	if(this.options.tracklistPosition == "top"){
 	//lets now append the trackListPanelDom to the layers 
-	trackListPanelDom.prependTo($(playerParentSelector));
+	trackListPanelDom.prependTo(playerParent);
 	}else{
 	//if bottom then append 
-	trackListPanelDom.appendTo($(playerParentSelector));
+	trackListPanelDom.appendTo(playerParent);
 	}//end if the track list is to be shown at the bottom 
 	
 	//hide the panelDom 
 	trackListPanelDom.hide();
-	
-	
-	//if any of the track item is clicked 
-		$(document).on("click",".mejs-track-item",function(evt){
 			
-			evt.preventDefault();
-	
-			//the item id 
-			var itemIndex = $(this).attr("id");
-			
-			//play Item By Id 
-			thisClass.playItemByIndex(itemIndex);	
-		});
-		
-	},//end build track list 
+	},//end create tracklist panel 
 	
 	
 	
@@ -287,6 +303,8 @@
 		//set the currentItemIndex
 		this.currentItemIndex = 0;
 		
+		//set Title 
+		this.setItemTitle(firstItemData.itemName);
 		
 		//lets detect when an audio has finished, playing, we move to the next 
 		media.addEventListener("ended",function(){
@@ -302,7 +320,7 @@
 	playListDataExists : function(player, controls, layers, media){
 		
 		//if the data was provided as an object, then lets use it 
-		if(this.options.playlistItems != null){
+		if(this.options.playlistItems.length > 0){
 		  return true;
 		}//end if not null 
 		
@@ -328,7 +346,7 @@
 	 
 		
 	//if an array data  was provided as playlist item data , then lets use that 
-    if(this.options.playlistItems != null){
+    if(this.options.playlistItems.length > 0){
     //lest insert the data into our global var 
 	this.playlistItemsData = this.options.playlistItems;
 	
@@ -336,10 +354,6 @@
 	//return it 
 	return this.options.playlistItems;
     }//end if \\
-	
-		 
-	 //lets set a local var of playlist items 
-	var playlistItemsDataArray = new Array();
 	
 	
 	/////////////////If html data was provided rather, then lets scan that ///////
@@ -371,14 +385,17 @@
 	$(this).attr("id",itemIndex);
 	
 	//lets push the data into our array 
-	playlistItemsDataArray.push({itemName:itemName,itemUrl:itemUrl,itemIndex:itemIndex});
+	this.playlistItemsData.push({itemName:itemName,itemUrl:itemUrl,itemIndex:itemIndex});
      
-	});//end playlist data Item loop 		 
+	});//end playlist data Item loop 
+
+  //lets set this.options.playlistItems to the scanned results,so that in our next scan,we will not do dom scan 
+  this.options.playlistItems = this.playlistItemsData;  
 		
-    //now lets attach our playlistItem to our Globals 
-    this.playlistItemsData = playlistItemsDataArray;
+    //lets create the tracklist panel 
+	this.createTrackListPanel();
 	
-	return playlistItemsDataArray;
+	return this.playlistItemsData;
 	},//end refreshPlaylistData function 
 
 	
@@ -387,8 +404,13 @@
 	getPlaylistItemsData : function(){
 		
 		//if the playlist items data is empty, then lets scan the dom first
-		if(this.playlistItemsData.length == 0){
+		if(this.playlistItemsData.length==0){
         this.refreshPlaylistData();		
+		
+		if(this.playlistItemsData.length ==0){
+			return false;
+		}//end if 
+		
 		}//end if the lenght is empty
 		
 		return this.playlistItemsData;
@@ -419,21 +441,30 @@
 	},//end get Item By Id 
 	
 	
+	///////////////SET Track Title //////////
+	setItemTitle : function(title){
 	
+	//lets get the player title 
+	titleDom = this.layers.parents(playerParentSelector).find(".mejs-item-title");
+	
+	//set Title 
+	titleDom.text(title);
+	
+	},///////////end set track title 
 	
 	///////PlayItemByUrl /////////
 	playItemByUrl : function(url){
 		
-		player = this;
+		thisClass = this;
 		
 		//first lets puase player 
-		player.pause();//pause Item
-		player.setSrc(url);//setSrc
+		thisClass.pause();//pause Item
+		thisClass.setSrc(url);//setSrc
 		
 		//a hacky fix where the play() doesnt work in event Listenr "ended"
 		setTimeout(function () {
-		player.load();
-		player.play();//play it 
+		thisClass.load();
+		thisClass.play();//play it 
 	     },500);
 		 
 	},//end playItem By Url 
@@ -446,6 +477,9 @@
     //lets get the playlistItemsData 
     playlistItems = this.getPlaylistItemsData();
 	
+		
+		console.log(this.playlistItemsData);
+		
 	//discontinue if false
 	if(playlistItems == false){
 		return false;
@@ -461,6 +495,9 @@
 	
 	//lets set currentItemIndex to the current Index 
 	this.currentItemIndex = itemIndex;
+	
+	//lets set the Item title 
+	this.setItemTitle(itemData.itemName);
 	
 	//tracklistDomSelector
 	tracklistSelector = "."+tracklistDomSelector;
@@ -560,8 +597,121 @@
 	//play Item By Index 
 	this.playItemByIndex(prevItemIndex);	
 	},//end play Previous 
+
+
+
 	
+	////////Append Item To the end of playlist Items 
+	appendItem : function(paramObj){
+		
+	//trackDataObj 
+	trackDataObj = paramObj.trackItem || null;
+	
+	//play After Append 
+	var playAfterAppend = paramObj.playAfterAppend || false;
+	
+	//if not obj or empty 
+	if(typeof trackDataObj != "object" && trackDataObj.length < 1){
+		debugMsg("Please Provide a valid trackItems to the method");
+		return false;
+	}//end if 
+	
+	//lets scan the data first, then we will add the new object to it 
+	getPlaylistItems = this.getPlaylistItemsData();
+	
+	//lets append to the options 
+	this.options.playlistItems.push(trackDataObj);
+	
+	//lets now create the item Index 
+	newItemIndex = this.playlistItemsData.length+1;
+	
+	//if false 
+	if(getPlaylistItems == false){
+		ItemIndex = 0;
+	}//end if false 
+	
+	//lets refresh 
+	//refresh the playListdata 
+	this.refreshPlaylistData(); 
+	
+	
+	//if playAfter Append is true 
+	if(playAfterAppend == true ){
+	
+    //play Item 	
+	this.playItemByIndex(ItemIndex);
+	}//end if play After Append is true 
+    
+	//return the item Index 
+	return ItemIndex;
+	},///////////////////////END APPEND 
+	
+	
+	////////Append Item To the end of playlist Items 
+	prependItem : function(paramObj){
+		
+	//trackDataObj 
+	var trackDataObj = paramObj.trackItem || null;
+	
+	//play After Prepend
+	var playAfterPrepend = paramObj.playAfterPrepend || false;
+	
+	//if not obj or empty 
+	if(typeof trackDataObj != "object" && trackDataObj.length < 1){
+		debugMsg("Please Provide a valid trackItems to the method");
+		return false;
+	}//end if 
+	
+	
+	 //track Index will always be 0 for prepend 
+	 ItemIndex = 0;
+	 
+	 //lets set the item Index 
+	 trackDataObj.itemIndex = ItemIndex;
+	
+	//lets now prepend it to the data Obj 
+	this.options.playlistItems.unshift(trackDataObj);
+	
+     //lets refresh 
+	//refresh the playListdata 
+	this.refreshPlaylistData(); 
+	
+	
+	//if play after prepend 
+     if(playAfterPrepend == true){
+	//play Item 	
+	this.playItemByIndex(ItemIndex); 
+	 }//end if play after prepend is true 
+	 
+	//return the item Index 
+	return ItemIndex;
+	},
 	
     });//end plugin 
 	
 })(mejs.$);
+
+
+
+///////////Audio Elemeent Js 
+function audioElementPlayer(selector,paramObj){
+
+return $(selector).each(function(){
+
+//lets modify user dom 
+var audioJsDom = "<div class='mejs-audio-player-parent'><div class='mejs-audio-player'></div></div>";
+
+//wrap the selector 
+$(selector).wrap(audioJsDom);
+
+//lets add the title 
+$("<h2 class='mejs-item-title'>Title Here</h2>").prependTo(".mejs-audio-player");
+
+//lets call mediaElementJs 
+var mediaElement = new MediaElementPlayer(selector,paramObj);
+
+return mediaElement;
+});
+
+}//end function 
+

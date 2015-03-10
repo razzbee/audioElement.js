@@ -4,6 +4,7 @@
     nextText: 'Next Track',
     previousText: 'Previous Track',
 	playlistItems : [],
+	enableLoop : true,
 	loopText : "Toggle Loop",
 	toggleTracklistText : "Toggle Track List",
 	noTracksText : "No tracks ",
@@ -99,9 +100,18 @@
 	 
 	//loopText
     var loopText = this.options.loopText;
-	 
+	
+	//default Loop Info
+	if(this.options.enableLoop == true){
+		defaultLoopIcon = loopAll;
+		thisClass.loopStatus = "all";
+	}//end if loop 	
+	else{
+	defaultLoopIcon = loopNone;	
+	}
+	
    //the loop dom 
-   var loopDom = "<span  class='mejs-button mejs-loop'><button type='submit' class='"+loopNone+" mejs-loop-button' title='"+loopText+"'>"+loopText+"</button></span>";	
+   var loopDom = "<span  class='mejs-button mejs-loop'><button type='submit' class='"+defaultLoopIcon+" mejs-loop-button' title='"+loopText+"'>"+loopText+"</button></span>";	
 
      //lets append to loop 
 	$(loopDom).appendTo(this.controls);
@@ -612,13 +622,13 @@
 
 	
 	////////Append Item To the end of playlist Items 
-	appendItem : function(paramObj){
+	appendItem : function(trackDataObj,playAfterAppend){
 		
 	//trackDataObj 
-	trackDataObj = paramObj.trackItem || null;
+	trackDataObj = trackDataObj || null;
 	
 	//play After Append 
-	var playAfterAppend = paramObj.playAfterAppend || false;
+	var playAfterAppend = playAfterAppend || false;
 	
 	//if not obj or empty 
 	if(typeof trackDataObj != "object" && trackDataObj.length < 1){
@@ -629,22 +639,25 @@
 	//lets scan the data first, then we will add the new object to it 
 	getPlaylistItems = this.getPlaylistItemsData();
 	
-	//lets append to the options 
-	this.options.playlistItems.push(trackDataObj);
-	
 	//lets now create the item Index 
-	newItemIndex = this.playlistItemsData.length+1;
+	ItemIndex = (this.playlistItemsData.length-1)+1;
 	
 	//if false 
 	if(getPlaylistItems == false){
 		ItemIndex = 0;
 	}//end if false 
 	
+	//lets append to the options 
+	this.options.playlistItems.push(trackDataObj);
+
+	
 	//lets refresh 
 	//refresh the playListdata 
 	this.refreshPlaylistData(); 
 	
+	this.buildtracklist();
 	
+
 	//if playAfter Append is true 
 	if(playAfterAppend == true ){
 	
@@ -658,13 +671,13 @@
 	
 	
 	////////Append Item To the end of playlist Items 
-	prependItem : function(paramObj){
+	 function(trackDataObj,playAfterPrepend){
 		
 	//trackDataObj 
-	var trackDataObj = paramObj.trackItem || null;
+	trackDataObj = trackDataObj || null;
 	
-	//play After Prepend
-	var playAfterPrepend = paramObj.playAfterPrepend || false;
+	//play After Append 
+	var playAfterPrepend = playAfterPrepend || false;
 	
 	//if not obj or empty 
 	if(typeof trackDataObj != "object" && trackDataObj.length < 1){
@@ -686,6 +699,7 @@
 	//refresh the playListdata 
 	this.refreshPlaylistData(); 
 	
+	this.buildtracklist();
 	
 	//if play after prepend 
      if(playAfterPrepend == true){

@@ -25,15 +25,11 @@ $(function(){
     audioWidth: '100%',
     audioHeight: 76,
 	debug : true,
-	playlistItems : [{itemName : "Bob Marley", itemUrl:"topRanking.mp3"}],
-    
+	playlistItems : [{itemName:"Banky",ItemUrl : "http://music.app/banky.mp3"},{itemName:"Johny",ItemUrl : "http://music.app/johny.mp3"}]
   });
   
- /* .prependItem({
-  trackItem : {itemName : "Bob Marley", itemUrl:"banky.mp3"},
-  playAfterPrepend : true
-  });
-*/
+ audioPlayer.appendItem({itemName : "Banky", itemUrl:"banky.mp3"},true);
+
   
  	
 });

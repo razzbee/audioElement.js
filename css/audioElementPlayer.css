@@ -42,6 +42,8 @@ div.mejs-audio-player {
   color: #ececec;
   text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
   overflow:hidden;
+   white-space: nowrap;
+   animation: marquee 50s linear infinite;
 }
 
 /***Toggle(Show/Hide ) Track List ***/
@@ -71,6 +73,8 @@ background : #4c4e5a;
 background: rgba(76,78,90,0.9);
 border : 1px solid #7B7D82;
 border-radius:4px 4px 0px 0px;
+height : 15em;
+overflow-y : auto;
 }
 
 .mejs-track-list-panel a, .mejs-track-list-panel .mejs-track-item{
@@ -80,7 +84,8 @@ font-size:16px !important;
  padding:4px;
  display:block;
  text-decoration : none;
-   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+ font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  
 }
 
 .mejs-track-list-panel .mejs-track-item:hover {

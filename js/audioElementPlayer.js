@@ -671,7 +671,7 @@
 	
 	
 	////////Append Item To the end of playlist Items 
-	 function(trackDataObj,playAfterPrepend){
+	 prependItem : function(trackDataObj,playAfterPrepend){
 		
 	//trackDataObj 
 	trackDataObj = trackDataObj || null;

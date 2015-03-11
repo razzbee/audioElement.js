@@ -25,12 +25,13 @@ $(function(){
     audioWidth: '100%',
     audioHeight: 76,
 	debug : true,
-	playlistItems : [{itemName:"Banky",ItemUrl : "http://music.app/banky.mp3"},{itemName:"Johny",ItemUrl : "http://music.app/johny.mp3"}]
+	playlistItems : [{itemName:"Banky",temUrl : "banky.mp3"},{itemName:"Johny",itemUrl : "johny.mp3"}]
   });
   
- audioPlayer.appendItem({itemName : "Banky", itemUrl:"banky.mp3"},true);
+ //lets now append an audio file to the end 
+ //this supports two parameters, the track Object and a boolean to tell whether to play the file or not after appending it,Default is false
+audioPlayer.appendItem({itemName : "Banky", itemUrl:"topRanking.mp3"},true);
 
-  
  	
 });
 </script>

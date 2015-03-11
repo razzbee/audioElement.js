@@ -312,13 +312,11 @@
 		//lets get the first Index's data 
 		firstItemData = this.getItemByIndex(0);
 		
-		if(firstItemData == false){
-			return false;
-		}//end false 
-		
-		
+		//if the first item is provided 
+		if(typeof firstItemData == 'object'){
+			
 		//lets get the first Index
-		this.setSrc(firstItemData.itemUrl);
+		this.playItemByUrl(firstItemData.itemUrl,true);
 		
 		//set the currentItemIndex
 		this.currentItemIndex = 0;
@@ -326,11 +324,21 @@
 		//set Title 
 		this.setItemTitle(firstItemData.itemName);
 		
+		}//end if not false 
+		
+		media.addEventListener("error",function(){
+		//if there are more playlist data 
+		if(thisClass.playlistItemsData.length > 1){
+			//play the next Item 
+			thisClass.playNextItem("auto");
+		}//end if 
+		});
+	
 		//lets detect when an audio has finished, playing, we move to the next 
 		media.addEventListener("ended",function(){
 			//play the next Item 
 			thisClass.playNextItem("auto");
-		},false);
+		});
 		
 	 },//end build playlist 
 	 /////////////////////////////////END Build Playlist ////////////
@@ -473,7 +481,7 @@
 	},///////////end set track title 
 	
 	///////PlayItemByUrl /////////
-	playItemByUrl : function(url){
+	playItemByUrl : function(url,doNotPlay){
 		
 		thisClass = this;
 		
@@ -484,7 +492,11 @@
 		//a hacky fix where the play() doesnt work in event Listenr "ended"
 		setTimeout(function () {
 		thisClass.load();
-		thisClass.play();//play it 
+		
+		if(doNotPlay != true){
+		thisClass.play();//play it
+		}
+		
 	     },500);
 		 
 	},//end playItem By Url 

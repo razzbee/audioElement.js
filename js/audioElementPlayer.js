@@ -8,15 +8,9 @@
 	loopText : "Toggle Loop",
 	toggleTracklistText : "Toggle Track List",
 	noTracksText : "No tracks ",
-	tracklistPosition : "top",
-	iPadUseNativeControls: true,
-    iPhoneUseNativeControls: true,
-    AndroidUseNativeControls: true,
-	alwaysShowControls: true
+	tracklistPosition : "top"
   });
 
-  //for the features lets force a custom feature 
-  mejs.MepDefaults.features = ['playpause','progress','volume','playlist','duration','current'];
    
    //we implemented our own loop,so lets disable mejs loop feature
    mejs.MepDefaults.loop = false;
@@ -731,6 +725,18 @@
 
 ///////////Audio Elemeent Js 
 function audioElementPlayer(selector,paramObj){
+	
+//for the features lets force a custom feature 
+paramObj.features = ['playpause','progress','volume','playlist','duration','current'];
+  
+  //force strict options 
+paramObj.iPadUseNativeControls = false;
+ 
+paramObj.iPhoneUseNativeControls = false;
+ 
+paramObj.AndroidUseNativeControls = false;
+	
+paramObj.alwaysShowControls = true;
 
 //lets modify user dom 
 var audioJsDom = "<div class='mejs-audio-player-parent'><div class='mejs-audio-player'></div></div>";
@@ -747,4 +753,3 @@ var mediaElement = new MediaElementPlayer(selector,paramObj);
 return mediaElement;
 
 }//end function 
-

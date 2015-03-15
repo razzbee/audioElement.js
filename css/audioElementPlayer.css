@@ -50,7 +50,7 @@ div.mejs-audio-player {
 .mejs-toggle-tracklist {
 position:absolute;
 top:28px;
-right : 196px;
+right : 10px;
 display: block;
 background:transparent;
 width: 26px;
@@ -186,7 +186,7 @@ background:url('pause.png');
   width: 18px;
   height: 19px;
   top: 28px;
-  right: 134px;
+  right: 210px;
   background: transparent url('audio.png') 0 0;
 }
 .mejs-controls .mejs-unmute button { background-position: 0 -19px; }
@@ -196,7 +196,7 @@ background:url('pause.png');
 .mejs-controls .mejs-horizontal-volume-slider {
   position: absolute !important;
   top: 33px;
-  right: 6px;
+  right: 86px;
   cursor: pointer;
 }
 
@@ -326,7 +326,7 @@ position: absolute;
 display: block;
 background:transparent;
 top:28px;
-right:158px;
+right:48px;
 width: 28px;
 height: 40px;
 }
@@ -347,11 +347,6 @@ background: url('mejs-loop-single.png') no-repeat;
 }
 
 
-/***End Looop **/
-
-
-
-
 /**Media Queries to help smaller screen in the responsive world */
 /*Tablets **/
   
@@ -359,87 +354,37 @@ background: url('mejs-loop-single.png') no-repeat;
 
 /*Volume Slider */
 .mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total ,.mejs-horizontal-volume-slider .mejs-horizontal-volume-current {
-  width: 60px;
+  width: 70px;
   }
-  
+ 
  /* mute/unmute control */
 .mejs-controls .mejs-mute button, .mejs-controls .mejs-unmute button {
-right : 73px;
+right : 163px;
+} 
+ 
+
+.mejs-item-title{
+margin-left : auto;margin-right : auto;
 }
 
-/*Loop Button */
-.mejs-loop-button{
-right : 96px;
-}
-
-/**Toggle TrackList **/
-.mejs-toggle-tracklist {
-right : 130px;
-}
-
-}/**End Tablets **/
-
-
-/**Phablets and smartphone landcape **/
-@media screen and (max-width: 524px) {
-
-/*Volume Slider */
-.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total {
-  width: 48px;
-  }
-  
- /* mute/unmute control */
-.mejs-controls .mejs-mute button, .mejs-controls .mejs-unmute button {
-right : 62px;
-}
-
-/*Loop Button */
-.mejs-loop-button{
-right : 86px;
-}
-
-/**Toggle TrackList **/
-.mejs-toggle-tracklist {
-right : 120px;
-}
-
-/*Audio Title Text **/
-.mejs-audio-player h2 {
-font-weight : 400;
-left:-12px !important;font-size:14px;width:30%;
-}
-
-}
+ }/*Stop Media Queries for 768 */
+/***End Looop **/
 
 
 /**Smartphones and very small screen **/
 @media screen and (max-width: 350px) {
 
 /*Volume Slider */
-.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total ,.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-handle,.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current{
+.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-total ,.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-handle,.mejs-controls .mejs-horizontal-volume-slider .mejs-horizontal-volume-current,
+.mejs-controls .mejs-mute button, .mejs-controls .mejs-unmute button{
  display:none;
   }
   
- /* mute/unmute control */
-.mejs-controls .mejs-mute button, .mejs-controls .mejs-unmute button {
-right : 4px;
-}
-
-/*Loop Button */
-.mejs-loop-button{
-right : 27px;
-}
-
-/**Toggle TrackList **/
-.mejs-toggle-tracklist {
-right : 60px;
-}
-
-/*Audio Title Text **/
-.mejs-audio-player h2 {
+ /*Audio Title Text **/
+.mejs-item-title {
 font-weight : 300;
 left:20px !important;font-size:12px;width:30%;
 }
 
-                                         }
-/*******END MEDIA QUERIES ****/
+}/*end media queries 350 width */
+

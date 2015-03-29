@@ -34,3 +34,6 @@ You can Feed the playlist data in playlistItems array , a sample of the playlist
 playlistItems : [{itemName:"God Is Good",itemUrl:"GodisGood.mp3"}];
 
 These forms the playlist data , look into the index.html for demo
+
+
+Another Working Demo : http://upafarma.com
